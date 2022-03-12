@@ -10,30 +10,38 @@ import com.example.demo.pattern.template.Football;
 import com.example.demo.pattern.template.Game;
 import com.example.demo.test1.QuotedPriceResultDTO;
 import com.example.demo.utils.RsaUtils;
+import com.example.demo.utils.StringUtils;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.vdurmont.emoji.EmojiParser;
+import java.math.BigDecimal;
 import java.security.KeyPair;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.CollectionUtils;
 
 //@RunWith(SpringRunner.class)
-@SpringBootTest
+//@SpringBootTest
 @Log4j2
 public class DemoApplicationTests {
 
 	@Test
 	public void contextLoads() {
     log.warn("开始游戏");
-//    StrategyPatternTest();
+    StrategyPatternTest();
+    log.warn("中场休息");
     TemplatePatternTest();
     log.warn("游戏结束");
 	}
@@ -70,7 +78,7 @@ public class DemoApplicationTests {
     log.info("10 * 5 = " + context.executeStrategy(10, 5));
   }
 
-	private void toPercentage() {
+  private void toPercentage() {
     StringBuilder builder = new StringBuilder("a");
     builder.append(1);
     builder.append(",");
@@ -79,19 +87,117 @@ public class DemoApplicationTests {
     builder.delete(builder.length()-1, builder.length());
     log.error(builder.toString());
     ReUtil.replaceAll("", "", "");
-    StringUtils.replaceAll("", "", "");
+    org.apache.commons.lang3.StringUtils.replaceAll("", "", "");
   }
 
-  private void test10() {
-	  System.out.println("hello world");
-	  log.error("红色日志");
-	  log.warn("紫色");
-	  log.info("无色");
+  private void logTest() {
+    System.out.println("hello world");
+    log.error("红色日志");
+    log.warn("紫色");
+    log.info("无色");
   }
 
-  private void test9() {
+	private void currentPathTest() {
+	  log.warn(System.getProperty("user.dir"));
+  }
+
+	private void subListTest() {
+    List<Object> objects = Lists.newArrayList();
+    log.warn(objects.subList(0,objects.size()));
+  }
+
+	private void containsTest() {
+	  log.warn(Lists.newArrayList().contains(1));
+  }
+
+	private void isContainChineseTest(String str) {
+    boolean isContainChinese = StringUtils.isContainChinese(str);
+    log.warn(isContainChinese);
+    if (!isContainChinese)
+      log.warn(StringUtils.toDBC(str));
+  }
+
+	private void splitTest() {
+    log.warn("".split("#"));
+    log.warn(Lists.newArrayList("".split("#")));
+  }
+
+	private void replaceSpaceTest() {
+	  String html = " 123 456   　　  789 \n"
+        + "  a\t  b\t c\r ";
+    String s = replaceBlank(html);
+    log.warn(s);
+    log.warn(html.replace("\\s+", "").trim());
+    log.warn(html.replace("\\s+", ""));
+    log.warn(html.replace("\\s+\\g", ""));
+  }
+
+  public static String replaceBlank(String string) {
+    String regEx = "(\\s|\\t|\\r|\\n|　)+";
+    Pattern pattern = Pattern.compile(regEx);
+    Matcher matcher = pattern.matcher(string);
+    return matcher.replaceAll("");
+  }
+
+	private void emptyMapTest() {
+    HashMap<Object, Object> objectObjectHashMap = Maps.newHashMap();
+    Set<Object> objects = objectObjectHashMap.keySet();
+    log.warn(objects.contains("1"));
+  }
+
+	private void bigDecimalTest() {
+    log.warn(BigDecimal.ZERO);
+    log.warn(BigDecimal.valueOf(0.00));
+    log.warn((float)System.currentTimeMillis());
+  }
+
+	private void printFloatSystemTimeTest() {
+    Date date = new Date(System.currentTimeMillis());
+    log.warn(date);
+    log.warn(System.currentTimeMillis());
+    log.warn((float)System.currentTimeMillis());
+  }
+
+	private void nullEqualTest() {
+	  Integer a = null;
+	  log.warn(1 == a);
+  }
+
+	private void nullFalseTest() {
+	  log.warn(null == Boolean.FALSE);
+	  Boolean a = false;
+	  log.warn(null == a);
+	  log.warn(a);
+  }
+
+	private void newMapTest() {
+    Map<String, String> map = new HashMap<>();
+    for (Map.Entry<String, String> value: map.entrySet()) {
+
+    }
+    log.warn("no error");
+  }
+
+	private void emojiTest() {
+    String str = "Here is a boy: 😒!";
+    log.warn("原始字符为：\n" + str);
+
+    log.warn("to aliases 之后：");
+    log.warn(EmojiParser.parseToAliases(str));
+    log.warn(EmojiParser.parseToAliases(str, EmojiParser.FitzpatrickAction.PARSE));
+    log.warn(EmojiParser.parseToAliases(str, EmojiParser.FitzpatrickAction.REMOVE));
+    log.warn(EmojiParser.parseToAliases(str, EmojiParser.FitzpatrickAction.IGNORE));
+  }
+
+	private void garbledTest() {
+	  log.warn("      发器");
+	  log.warn("������发器");
+    log.warn("😒");
+    log.warn("😒".codePoints().toString());
+  }
+
+  private void RSATest() {
     try {
-      List<String> a = new ArrayList();
       // 生成密钥对
       KeyPair keyPair = RsaUtils.getKeyPair();
       String privateKey = new String(Base64.encodeBase64(keyPair.getPrivate().getEncoded()));
@@ -117,25 +223,26 @@ public class DemoApplicationTests {
     }
   }
 
-	private void test8() {
+	private void replaceTest() {
 	  String str = "ite ite ite ";
 	  log.error(str.replace("te", "i"));
   }
 
-	private void test7() {
+	private void substringTest() {
 	  String vin = "-";
     log.error(StringUtils.substring(vin, vin.length() - 4));
   }
 
-	private void test6() {
+	private void thisTest() {
     QuotedPriceResultDTO quotedPriceResultDTO = new QuotedPriceResultDTO();
     quotedPriceResultDTO.setCountryDistance(new Double(1));
     log.error(quotedPriceResultDTO.validate());
   }
 
-	private void test5() {
+	private void newListTest() {
     List<Boolean> list = Lists.newArrayList();
 	  list.stream().filter(p -> p).collect(Collectors.toList());
+	  list.stream().collect(Collectors.toMap(Function.identity(), Function.identity(), (k1, k2) -> k1));
 	  log.error("test5");
   }
 

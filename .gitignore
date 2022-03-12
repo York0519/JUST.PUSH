@@ -1,5 +1,20 @@
+HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+*rebel.xml
+*.DS_Store
+.svn
+.gradle
+*/out/
+out/
+*/build/
+build/
+font/
+.mvn/
+mvnw*
 
 ### STS ###
 .apt_generated
@@ -8,6 +23,7 @@ target/
 .project
 .settings
 .springBeans
+.sts4-cache
 
 ### IntelliJ IDEA ###
 .idea
@@ -16,9 +32,45 @@ target/
 *.ipr
 
 ### NetBeans ###
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+# Compiled class file
+*.class
+*.idea
+*/target/
+*target/
+*.project
+*.settings
+*.classpath
+
+# Log file
+*.log
+/logs/
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+yarn.lock

@@ -105,6 +105,11 @@
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
     </dependency>
+		<dependency>
+			<groupId>com.vdurmont</groupId>
+			<artifactId>emoji-java</artifactId>
+			<version>4.0.0</version>
+		</dependency>
 		<!--Hutool Java工具包-->
 		<dependency>
 			<groupId>cn.hutool</groupId>

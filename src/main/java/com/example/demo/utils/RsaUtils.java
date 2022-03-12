@@ -1,7 +1,7 @@
 package com.example.demo.utils;
-import	java.nio.charset.StandardCharsets;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -27,7 +27,7 @@ public class RsaUtils {
   /**
    * RSA密钥长度
    */
-  private static final int RSA_KEY_SIZE = 2048;
+  private static final int RSA_KEY_SIZE = 1024;
 
   /**
    * RSA最大解密密文大小

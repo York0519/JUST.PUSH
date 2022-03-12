@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 /**
- * @author OG02
+ * @author York
  */
 @Log4j2
 public class DemoMainTest {
@@ -146,7 +146,7 @@ public class DemoMainTest {
    *
    * @param nextDay 需要获取的天数
    * @return Date  几天后的时间
-   * @author JUM
+   * @author York
    */
   public static Date getNextDate(int nextDay) {
     Calendar c = Calendar.getInstance(TimeZone.getDefault(), Locale.CHINA);
