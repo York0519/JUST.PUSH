@@ -254,7 +254,7 @@ public class DemoMainTest {
    * 分组排序处理译码结果列表
    *
    * @param resolveManageInfos 入参
-   * @return: java.util.List<com.casstime.ec.cloud.inquiry.entity.union.ResolveManageUnion>
+   * @return: java.util.List<com.example.demo.test1.ResolveManageUnion>
    * @author: York
    * @date: 2019/7/4 004 21:07
    */

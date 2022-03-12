@@ -1,9 +1,18 @@
 package com.example.demo;
 
+import cn.hutool.core.util.ReUtil;
+import com.example.demo.pattern.strategy.Context;
+import com.example.demo.pattern.strategy.OperationAdd;
+import com.example.demo.pattern.strategy.OperationMultiply;
+import com.example.demo.pattern.strategy.OperationSubtract;
+import com.example.demo.pattern.template.BallFight;
+import com.example.demo.pattern.template.Football;
+import com.example.demo.pattern.template.Game;
 import com.example.demo.test1.QuotedPriceResultDTO;
 import com.example.demo.utils.RsaUtils;
 import com.google.common.collect.Lists;
 import java.security.KeyPair;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -13,25 +22,76 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.CollectionUtils;
 
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 @SpringBootTest
 @Log4j2
 public class DemoApplicationTests {
 
 	@Test
 	public void contextLoads() {
-
-    test9();
-
+    log.warn("开始游戏");
+//    StrategyPatternTest();
+    TemplatePatternTest();
+    log.warn("游戏结束");
 	}
+
+  /**
+   * 模板模式测试
+   *
+   * @author Yuqiang Wu
+   * @since 2022/3/12 012 11:52
+   */
+  private void TemplatePatternTest() {
+    Game game = new BallFight();
+    game.play();
+    log.info("\n");
+    game = new Football();
+    game.play();
+  }
+
+  /**
+   * 策略模式测试<br />
+   * 使用 Context 来查看当它改变策略 Strategy 时的行为变化
+   *
+   * @author Yuqiang Wu
+   * @since 2022/3/12 012 11:52
+   */
+  private void StrategyPatternTest() {
+    Context context = new Context(new OperationAdd());
+    log.info("10 + 5 = " + context.executeStrategy(10, 5));
+
+    context = new Context(new OperationSubtract());
+    log.info("10 - 5 = " + context.executeStrategy(10, 5));
+
+    context = new Context(new OperationMultiply());
+    log.info("10 * 5 = " + context.executeStrategy(10, 5));
+  }
+
+	private void toPercentage() {
+    StringBuilder builder = new StringBuilder("a");
+    builder.append(1);
+    builder.append(",");
+    builder.append(2);
+    builder.append(",");
+    builder.delete(builder.length()-1, builder.length());
+    log.error(builder.toString());
+    ReUtil.replaceAll("", "", "");
+    StringUtils.replaceAll("", "", "");
+  }
+
+  private void test10() {
+	  System.out.println("hello world");
+	  log.error("红色日志");
+	  log.warn("紫色");
+	  log.info("无色");
+  }
 
   private void test9() {
     try {
+      List<String> a = new ArrayList();
       // 生成密钥对
       KeyPair keyPair = RsaUtils.getKeyPair();
       String privateKey = new String(Base64.encodeBase64(keyPair.getPrivate().getEncoded()));
@@ -39,7 +99,7 @@ public class DemoApplicationTests {
       System.out.println("私钥:" + privateKey);
       System.out.println("公钥:" + publicKey);
       // RSA加密
-      String data = "{\"vin\":\"WAUAYA8XXCB035669\",\"carBrandId\":\"AUDI\",\"carBrandName\":\"奥迪\",\"carModelName\":\"进口奥迪 奥迪A1 Ambition 1,4A1\",\"userName\":\"猴哥\",\"userId\":\"xablqc\",\"contactNumber\":\"18696227678\",\"openInvoiceType\":\"YES\",\"qualities\":[\"ORIGINAL_BRAND\",\"EXTERNAL_BRAND\",\"INTERNAL_BRAND\",\"ORIGINAL_OTHERS\",\"OTHER_BRAND\"],\"storeIds\":[],\"source\":\"ANDROID\",\"selectBrandFlag\":\"Y\",\"isAnonymous\":1,\"vinPicture\":\"http://cass-mobile.oss-cn-shenzhen.aliyuncs.com/vin/production/success/00010722_124958_VIN_LFV3A28K6G3029712.jpg\",\"requireItemInvoice\":true,\"geoProvinceId\":\"24\",\"geoProvinceName\":\"枣阳省\",\"geoCityId\":\"240\",\"geoCityName\":\"枣阳市\",\"countyGeoId\":\"2401\",\"countyGeoName\":\"枣阳区\",\"garageCompanyName\":\"猴哥牛B\",\"garageCompanyId\":\"10762\",\"picDemand\":[\"NAMEPLATE\"],\"picDemandUrls\":[{\"mediaType\":\"PICTURE\",\"typeId\":\"NONE\",\"url\":\"http://cass-mobile.oss-cn-shenzhen.aliyuncs.com/vin/production/success/00010722_124958_VIN_LFV3A28K6G3029712.jpg\"}],\"simpleInquiryBatchItems\":[{\"content\":\"雨刮片（）《》<>|<>\",\"mediaType\":\"AUDIO\",\"url\":\"https://cass-upload.oss-cn-shenzhen.aliyuncs.com/test/agentBuy/2019-08-10/blzcw_20190810164718.wav\",\"itemNum\":0,\"description\":\"22\"}]}";
+      String data = "{\"vin\":\"WAUAYA8XXCB035669\",\"carBrandId\":\"AUDI\",\"carBrandName\":\"奥迪\",\"carModelName\":\"进口奥迪 奥迪A1 Ambition 1,4A1\",\"userName\":\"猴哥\",\"userId\":\"xablqc\",\"contactNumber\":\"18696227678\",\"openInvoiceType\":\"YES\",\"qualities\":[\"ORIGINAL_BRAND\",\"EXTERNAL_BRAND\",\"INTERNAL_BRAND\",\"ORIGINAL_OTHERS\",\"OTHER_BRAND\"],\"storeIds\":[],\"source\":\"ANDROID\",\"selectBrandFlag\":\"Y\",\"isAnonymous\":1,\"vinPicture\":\"http://jk-mobile.oss-cn-shenzhen.aliyuncs.com/vin/production/success/00010722_124958_VIN_LFV3A28K6G3029712.jpg\",\"requireItemInvoice\":true,\"geoProvinceId\":\"24\",\"geoProvinceName\":\"枣阳省\",\"geoCityId\":\"240\",\"geoCityName\":\"枣阳市\",\"countyGeoId\":\"2401\",\"countyGeoName\":\"枣阳区\",\"garageCompanyName\":\"猴哥牛B\",\"garageCompanyId\":\"10762\",\"picDemand\":[\"NAMEPLATE\"],\"picDemandUrls\":[{\"mediaType\":\"PICTURE\",\"typeId\":\"NONE\",\"url\":\"http://jk-mobile.oss-cn-shenzhen.aliyuncs.com/vin/production/success/00010722_124958_VIN_LFV3A28K6G3029712.jpg\"}],\"simpleInquiryBatchItems\":[{\"content\":\"雨刮片（）《》<>|<>\",\"mediaType\":\"AUDIO\",\"url\":\"https://jk-upload.oss-cn-shenzhen.aliyuncs.com/test/agentBuy/2019-08-10/blzcw_20190810164718.wav\",\"itemNum\":0,\"description\":\"22\"}]}";
       String encryptData = RsaUtils.encrypt(data, RsaUtils.getPublicKey(publicKey));
       System.out.println("加密后内容:" + encryptData);
       // RSA解密
@@ -109,7 +169,7 @@ public class DemoApplicationTests {
   /**
    * 分组排序处理译码结果列表
    *
-   * @return: java.util.List<com.casstime.ec.cloud.inquiry.entity.union.ResolveManageUnion>
+   * @return: java.util.List<com.example.demo.DemoApplicationTests.ResolveManageUnion>
    * @author: York
    * @date: 2019/7/4 004 21:07
    */
