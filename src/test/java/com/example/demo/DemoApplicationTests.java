@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -40,11 +41,42 @@ public class DemoApplicationTests {
 	@Test
 	public void contextLoads() {
     log.warn("开始游戏");
-    StrategyPatternTest();
-    log.warn("中场休息");
-    TemplatePatternTest();
+//    StrategyPatternTest();
+//    log.warn("中场休息");
+    StringTest1();
     log.warn("游戏结束");
 	}
+
+  public static void main(String[] args) {
+    log.warn("开始游戏");
+    StringTest2();
+    log.warn("游戏结束");
+  }
+
+  private static void StringTest2() {
+    Scanner sc = new Scanner(System.in);
+    while (sc.hasNext()) {
+      String str = sc.nextLine().toUpperCase();
+      String b = sc.nextLine().toUpperCase();
+      char a = b.charAt(0);
+      int count = 0;
+      char[] ch = str.toCharArray();
+      for (char c : ch) {
+        if (c == a) {
+          count++;
+        }
+      }
+      log.error(count);
+    }
+  }
+
+  private static void StringTest1() {
+    Scanner sc = new Scanner(System.in);
+    while (sc.hasNext()) {
+      String str = sc.nextLine();
+      log.error(str.length() - 1 - str.lastIndexOf(" "));
+    }
+  }
 
   /**
    * 模板模式测试
