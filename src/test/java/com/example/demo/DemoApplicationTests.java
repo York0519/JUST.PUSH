@@ -14,6 +14,7 @@ import com.example.demo.utils.StringUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.vdurmont.emoji.EmojiParser;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.security.KeyPair;
 import java.util.Arrays;
@@ -31,6 +32,10 @@ import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.codec.binary.Base64;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
 
@@ -40,18 +45,26 @@ import org.springframework.util.CollectionUtils;
 public class DemoApplicationTests {
 
 	@Test
-	public void contextLoads() {
+	public void contextLoads() throws Exception {
     log.warn("开始游戏");
 //    StrategyPatternTest();
 //    log.warn("中场休息");
-    StringTest1();
+    jsoupTest();
     log.warn("游戏结束");
 	}
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
     log.warn("开始游戏");
     StringTest2();
     log.warn("游戏结束");
+  }
+
+  private void jsoupTest() throws IOException {
+    Document doc = Jsoup.connect("https://www.baidu.com/s?ie=UTF-8&wd=%E7%83%AD%E6%90%9C").get();
+    Elements hotSearches = doc.select(".card-big_2cg0U .card-container_3QMk1 .hot-item_1473U a");
+    for (Element hotSearch : hotSearches) {
+      System.out.println(hotSearch.text());
+    }
   }
 
   private void trimTest() {
