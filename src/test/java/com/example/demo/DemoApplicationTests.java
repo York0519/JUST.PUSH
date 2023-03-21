@@ -16,6 +16,7 @@ import com.google.common.collect.Maps;
 import com.vdurmont.emoji.EmojiParser;
 import java.math.BigDecimal;
 import java.security.KeyPair;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -51,6 +52,18 @@ public class DemoApplicationTests {
     log.warn("开始游戏");
     StringTest2();
     log.warn("游戏结束");
+  }
+
+  private void trimTest() {
+    String a = " 12 \n \t \r 3f  rt  ";
+    log.info(a.trim());
+    log.info(a.replaceAll("\\s*", ""));
+  }
+
+  private void stringArraysTest() {
+    String[] a = new String[]{"1", "2"};
+    List<Long> collect = Arrays.stream(a).map(Long::valueOf).collect(Collectors.toList());
+    log.info(collect);
   }
 
   private static void StringTest2() {
