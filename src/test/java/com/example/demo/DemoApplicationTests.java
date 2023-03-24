@@ -49,7 +49,8 @@ public class DemoApplicationTests {
     log.warn("开始游戏");
 //    StrategyPatternTest();
 //    log.warn("中场休息");
-    jsoupTest();
+//    jsoupTest();
+    replaceTest();
     log.warn("游戏结束");
 	}
 
@@ -282,8 +283,8 @@ public class DemoApplicationTests {
   }
 
 	private void replaceTest() {
-	  String str = "ite ite ite ";
-	  log.error(str.replace("te", "i"));
+	  String str = "”ite“ ite ite ";
+	  log.error(str.replace("te", "i").replaceAll("”", "\\\"").replaceAll("“", "\\\""));
   }
 
 	private void substringTest() {
