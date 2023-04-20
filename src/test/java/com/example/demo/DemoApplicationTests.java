@@ -13,10 +13,31 @@ import com.example.demo.utils.RsaUtils;
 import com.example.demo.utils.StringUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef.HWND;
+import com.sun.jna.platform.win32.WinDef.RECT;
 import com.vdurmont.emoji.EmojiParser;
+import java.awt.AWTException;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.PointerInfo;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.security.KeyPair;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -29,14 +50,25 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
+import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.codec.binary.Base64;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 import org.springframework.util.CollectionUtils;
 
 //@RunWith(SpringRunner.class)
@@ -44,15 +76,204 @@ import org.springframework.util.CollectionUtils;
 @Log4j2
 public class DemoApplicationTests {
 
+  static {
+    String opencvDllPath = "D:\\JUST.PUSH";
+    System.setProperty("java.library.path", opencvDllPath);
+//    System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+  }
+
 	@Test
 	public void contextLoads() throws Exception {
     log.warn("开始游戏");
 //    StrategyPatternTest();
 //    log.warn("中场休息");
 //    jsoupTest();
-    replaceTest();
+    robotTest();
     log.warn("游戏结束");
+    Assertions.assertTrue(true);
 	}
+
+  public void robotTest() throws IOException, AWTException, UnsupportedFlavorException, TesseractException {
+    // 启动外部应用程序
+    ProcessBuilder pb = new ProcessBuilder("D:\\4.8.exe");
+    pb.redirectErrorStream(true);
+    Process p = pb.start();
+
+    // 等待应用程序启动
+    try {
+      Thread.sleep(5000);
+    } catch (InterruptedException e) {
+    }
+
+    // 获取应用程序的输入输出流
+    OutputStream stdin = p.getOutputStream();
+    InputStream stdout = p.getInputStream();
+
+    // 获取当前鼠标的位置信息
+    PointerInfo pointerInfo = MouseInfo.getPointerInfo();
+    // 获取鼠标所在的屏幕和坐标
+    int x = pointerInfo.getLocation().x;
+    int y = pointerInfo.getLocation().y;
+    int screenX = (int) pointerInfo.getDevice().getDefaultConfiguration().getBounds().getX();
+    int screenY = (int) pointerInfo.getDevice().getDefaultConfiguration().getBounds().getY();
+
+//    HWND hwnd = new HWND(Native.getWindowPointer(p));
+    HWND hwnd = User32.INSTANCE.FindWindow(null, "v4.8");
+    // 获取窗口尺寸信息
+    RECT rect = new RECT();
+    User32.INSTANCE.GetWindowRect(hwnd, rect);
+
+    // 创建 Robot 对象
+    Robot robot = new Robot(); // 移动鼠标到第一个输入框
+
+    // 点击按钮
+    Point inputBox2 = new Point(rect.left + 534, rect.top + 306);
+    robot.mouseMove(inputBox2.x, inputBox2.y);
+    robot.mousePress(InputEvent.BUTTON1_MASK);
+    robot.mouseRelease(InputEvent.BUTTON1_MASK);
+
+    Point inputBox1 = new Point(rect.left + 171, rect.top + 382);// 获取应用程序的窗口句柄
+//    Point inputBox1 = new Point(rect.left + 171 - (x - screenX), rect.top + 382 - (y - screenY));// 获取记事本应用程序的窗口句柄
+    robot.mouseMove(inputBox1.x, inputBox1.y);
+    robot.mousePress(KeyEvent.BUTTON1_DOWN_MASK);
+    robot.mouseRelease(KeyEvent.BUTTON1_DOWN_MASK);
+
+    // 需要输入的字符串
+    String str = "hello world";
+
+    // 将字符串拆分成单个字符，并依次模拟按键操作
+    for (int i = 0; i < str.length(); i++) {
+      char c = str.charAt(i);
+      int keyCode = KeyEvent.getExtendedKeyCodeForChar(c);
+
+      // 模拟按键按下操作
+      robot.keyPress(keyCode);
+      // 模拟按键释放操作
+      robot.keyRelease(keyCode);
+    }
+
+    // 等待应用程序输出结果
+    try {
+      Thread.sleep(5000);
+    } catch (InterruptedException e) {
+    }
+
+// 将鼠标移动到输入框上
+    Point inputBox3 = new Point(rect.left + 243, rect.top + 300);
+    robot.mouseMove(inputBox3.x, inputBox3.y);
+
+// 模拟点击鼠标左键
+    robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+    robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+
+// 模拟按下 Ctrl+A 键
+    robot.keyPress(KeyEvent.VK_CONTROL);
+    robot.keyPress(KeyEvent.VK_A);
+    robot.keyRelease(KeyEvent.VK_A);
+    robot.keyRelease(KeyEvent.VK_CONTROL);
+
+// 模拟按下 Ctrl+C 键
+    robot.keyPress(KeyEvent.VK_CONTROL);
+    robot.keyPress(KeyEvent.VK_C);
+    robot.keyRelease(KeyEvent.VK_C);
+    robot.keyRelease(KeyEvent.VK_CONTROL);
+
+// 读取剪贴板中的内容
+    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+    Transferable contents = clipboard.getContents(null);
+    if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+      String text = (String) contents.getTransferData(DataFlavor.stringFlavor);
+      System.out.println("输入框的值为：" + text);
+    }
+
+    // 截取屏幕截图
+    BufferedImage screenshot = robot.createScreenCapture(
+        new Rectangle(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top));
+    ImageIO.write(screenshot, "png", new File("screenshot.png"));
+
+    // 提取文字
+
+    // 初始化Tesseract OCR
+    ITesseract ocr2 = new Tesseract();
+    ocr2.setDatapath(".");
+    ocr2.setLanguage("eng");
+
+    // 识别单元格中的文本
+    String text2 = ocr2.doOCR(new File("screenshot.png"));
+    log.warn(text2);
+
+// 加载图像
+    Mat image = Imgcodecs.imread("D:\\screenshot.png");
+
+    // 转换为灰度图像
+    Mat gray = new Mat();
+    Imgproc.cvtColor(image, gray, Imgproc.COLOR_BGR2GRAY);
+
+    // 二值化图像
+    Mat binary = new Mat();
+    Imgproc.threshold(gray, binary, 0, 255, Imgproc.THRESH_BINARY_INV + Imgproc.THRESH_OTSU);
+
+    // 使用形态学操作去除噪点
+    Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3));
+    Mat morph = new Mat();
+    Imgproc.morphologyEx(binary, morph, Imgproc.MORPH_CLOSE, kernel);
+
+    // 查找轮廓
+    List<MatOfPoint> contours = new ArrayList<>();
+    Mat hierarchy = new Mat();
+    Imgproc.findContours(morph, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+
+    // 查找表格轮廓
+    List<MatOfPoint> tableContours = new ArrayList<>();
+    for (int i = 0; i < contours.size(); i++) {
+      MatOfPoint contour = contours.get(i);
+
+      // 计算轮廓的面积和周长
+      double area = Imgproc.contourArea(contour);
+      double perimeter = Imgproc.arcLength(new MatOfPoint2f(contour.toArray()), true);
+
+      // 根据面积和周长筛选轮廓
+      if (area > 1000 && perimeter > 100) {
+        double[] hierarchyData = hierarchy.get(0, i);
+        int parentIdx = (int) hierarchyData[3];
+
+        // 判断是否为表格轮廓
+        if (parentIdx == -1) {
+          tableContours.add(contour);
+        }
+      }
+    }
+
+    // 初始化Tesseract OCR
+    ITesseract ocr = new Tesseract();
+    ocr.setDatapath(".");
+    ocr.setLanguage("eng");
+
+    // 查找每个单元格的位置和文本
+    for (int i = 0; i < tableContours.size(); i++) {
+      MatOfPoint contour = tableContours.get(i);
+
+      // 获取单元格的外接矩形
+      org.opencv.core.Rect rect2 = Imgproc.boundingRect(contour);
+
+      // 截取单元格图像
+      Mat cell = new Mat(image, rect2);
+
+      // 将OpenCV的Mat图像转换为File对象，以便Tesseract库可以处理它
+      File tempFile = File.createTempFile("ocr_input", ".png");
+      Imgcodecs.imwrite(tempFile.getAbsolutePath(), cell);
+
+      // 识别单元格中的文本
+      String text = ocr.doOCR(tempFile);
+
+      // 输出单元格的位置和文本
+      System.out.println("单元格 " + (i + 1) + " 的位置：" + rect2.toString());
+      System.out.println("单元格 " + (i + 1) + " 的文本：" + text);
+    }
+
+// 关闭进程
+    p.destroy();
+  }
 
   public static void main(String[] args) throws Exception {
     log.warn("开始游戏");
