@@ -88,10 +88,18 @@ public class DemoApplicationTests {
 //    StrategyPatternTest();
 //    log.warn("中场休息");
 //    jsoupTest();
-    robotTest();
+//    robotTest();
+    toMapTest();
     log.warn("游戏结束");
     Assertions.assertTrue(true);
 	}
+
+  private void toMapTest() {
+    List<ResolveManageUnion> list = Lists.newArrayList();
+    Map<String, ResolveManageUnion> map = list.stream()
+        .collect(Collectors.toMap(ResolveManageUnion::getShoppingListId, Function.identity()));
+    log.error(map);
+  }
 
   public void robotTest() throws IOException, AWTException, UnsupportedFlavorException, TesseractException {
     // 启动外部应用程序
