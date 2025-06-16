@@ -1,44 +1,82 @@
 package com.example.demo.leetcode;
 
 import com.alibaba.fastjson.JSON;
-import java.math.BigInteger;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
+
+import java.math.BigInteger;
+import java.util.Optional;
 
 @Log4j2
 public class Solution {
 
   public static void main(String[] args) {
-    log.warn(
-        addTwoNumbers1(
-        new ListNode(2, new ListNode(4, new ListNode(3))),
-        new ListNode(5, new ListNode(6, new ListNode(4))))
-    );
-    log.warn(
-        addTwoNumbers2(
-            new ListNode(1, new ListNode(8)),
-            new ListNode(0))
-    );
+    log.error("开始游戏");
+//    log.warn(
+//        addTwoNumbers1(
+//            new ListNode(2, new ListNode(4, new ListNode(3))),
+//            new ListNode(5, new ListNode(6, new ListNode(4))))
+//    );
+//    log.warn(
+//        addTwoNumbers2(
+//            new ListNode(1, new ListNode(8)),
+//            new ListNode(0))
+//    );
+    log.warn(maximumDifference(new int[]{2, 5, 1, 3, 6})); // 0 3
+    log.error("结束游戏");
+  }
+
+  /**
+   * 2016. 增量元素之间的最大差值
+   * 给你一个下标从 0 开始的整数数组 nums ，如果存在 i < j 满足 nums[i] < nums[j] ，
+   * 那么 nums[j] - nums[i] 的 最大值 为此对的差值。返回 最大差值 。如果不存在这样的对，返回 -1 。
+   */
+  public static int maximumDifference(int[] nums) {
+//    Map<String, Integer> map = new HashMap<>();
+//    map.put("minIndex", 0);
+//    map.put("minNum", nums[0]);
+//    map.put("maxIndex", 1);
+//    map.put("maxNum", nums[1]);
+//    for (int i = 2; i < nums.length - 1; i++) {
+//      if (nums[i] >= map.get("maxNum")) {
+//        map.put("maxIndex", i);
+//        map.put("maxNum", nums[i]);
+//      }
+//      if (i < map.get("maxIndex") && nums[i - 1] < map.get("minNum")) {
+//        map.put("minIndex", i - 1);
+//        map.put("minNum", nums[i - 1]);
+//      }
+//    }
+    return -1;
   }
 
   @Getter
-    public static class ListNode {
-        int val;
-        ListNode next;
-        ListNode() {}
-        ListNode(int val) { this.val = val; }
-        ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+  public static class ListNode {
+    int val;
+    ListNode next;
 
-      @Override
-      public String toString() {
-        return JSON.toJSONString(this);
-      }
+    ListNode() {
     }
+
+    ListNode(int val) {
+      this.val = val;
+    }
+
+    ListNode(int val, ListNode next) {
+      this.val = val;
+      this.next = next;
+    }
+
+    @Override
+    public String toString() {
+      return JSON.toJSONString(this);
+    }
+  }
 
   public static ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
     return addTwoNumbers(l1, l2, 0);
   }
+
   public static ListNode addTwoNumbers(ListNode l1, ListNode l2, int add) {
     l1 = Optional.ofNullable(l1).orElse(new ListNode(0));
     l2 = Optional.ofNullable(l2).orElse(new ListNode(0));
@@ -75,6 +113,7 @@ public class Solution {
     }
     return listNode;
   }
+
   public static BigInteger parseNumber(String s, ListNode listNode) {
     if (listNode != null) {
       s = listNode.val + s;
