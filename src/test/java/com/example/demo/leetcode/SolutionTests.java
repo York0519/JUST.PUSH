@@ -3,6 +3,7 @@ package com.example.demo.leetcode;
 import com.alibaba.fastjson.JSON;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
+import org.junit.Test;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -12,9 +13,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Log4j2
-public class Solution {
+public class SolutionTests {
 
-  public static void main(String[] args) {
+  @Test
+  public void contextLoads() throws Exception {
     log.error("开始游戏");
 //    log.warn(
 //        addTwoNumbers1(
@@ -28,6 +30,7 @@ public class Solution {
 //    );
 //    log.warn(maximumDifference(new int[]{2, 5, 1, 3, 6})); // 0 3
     log.warn(findMedianSortedArrays(new int[]{1, 3}, new int[]{2}));
+    log.warn(findMedianSortedArrays(new int[]{1, 2}, new int[]{3, 4}));
     log.error("结束游戏");
   }
 
