@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import cn.hutool.core.util.ReUtil;
+import com.example.demo.model.GraphAdjMat;
 import com.example.demo.pattern.strategy.Context;
 import com.example.demo.pattern.strategy.OperationAdd;
 import com.example.demo.pattern.strategy.OperationMultiply;
@@ -17,13 +18,28 @@ import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinDef.RECT;
 import com.vdurmont.emoji.EmojiParser;
-import java.awt.AWTException;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.PointerInfo;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
+import lombok.Data;
+import lombok.extern.log4j.Log4j2;
+import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
+import org.apache.commons.codec.binary.Base64;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Size;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+import org.springframework.util.CollectionUtils;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -50,26 +66,6 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import javax.imageio.ImageIO;
-import lombok.Data;
-import lombok.extern.log4j.Log4j2;
-import net.sourceforge.tess4j.ITesseract;
-import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.TesseractException;
-import org.apache.commons.codec.binary.Base64;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.MatOfPoint2f;
-import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-import org.springframework.util.CollectionUtils;
 
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
@@ -89,10 +85,21 @@ public class DemoApplicationTests {
 //    log.warn("中场休息");
 //    jsoupTest();
 //    robotTest();
-    toMapTest();
+//    toMapTest();
+    graphAdjMatTest();
     log.warn("游戏结束");
     Assertions.assertTrue(true);
 	}
+
+  private void graphAdjMatTest() {
+    GraphAdjMat graphAdjMat = new GraphAdjMat(
+        new int[]{1, 2, 3, 4},
+        new int[][]{
+            {0, 1}, {0, 2}, {1, 2}, {1, 3}, {2, 3}
+        }
+    );
+    graphAdjMat.print();
+  }
 
   private void toMapTest() {
     List<ResolveManageUnion> list = Lists.newArrayList();
